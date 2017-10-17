@@ -1,0 +1,23 @@
+.form-authentication {
+    margin: 0 auto;
+    text-align: center;
+    width: 300px;
+  
+    mat-form-field {
+      width : 100%;
+    }
+  
+    mat-icon[matSuffix] {
+      cursor: pointer;
+    }
+  
+    form-group {
+     padding-top : 6px;
+     padding-bottom : 6px;
+    }
+  
+    button{
+      margin-top : 10px;
+      width: 100%;
+    }
+  }

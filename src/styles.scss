@@ -1,0 +1,115 @@
+/* You can add global styles to this file, and also import other style files */
+
+body,
+html,
+app-root {
+  font-family: Roboto, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+}
+
+input,
+textarea,
+buttons {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004);
+}
+
+select {
+    display: inline-block;
+}
+
+
+/**
+ * Header CSS
+ */
+
+header {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 2;
+}
+
+footer {
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+
+.banner {
+  margin-top: 20px;
+  width: 100%;
+}
+
+.header,
+.marketing,
+.footer {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+
+/* Custom page header */
+
+.header {
+  border-bottom: 1px solid #e5e5e5;
+  margin-bottom: 10px;
+  color: #ee6e73;
+  font-weight: 300;
+}
+
+
+/* Make the masthead heading the same height as the navigation */
+
+.header h3 {
+  margin-top: 0;
+  margin-bottom: 0;
+  line-height: 40px;
+  padding-bottom: 19px;
+}
+
+
+/* Custom page footer */
+
+.footer {
+  padding-top: 19px;
+  color: #777;
+  border-top: 1px solid #e5e5e5;
+}
+
+
+/* Fix badge not in material css*/
+
+.badge {
+  display: inline-block;
+  min-width: 8px;
+  padding: 3px 5px;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 1;
+  color: #fff;
+  /* Couleur de texte : Blanc */
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  background-color: red;
+  /* Couleur de l’arrière plan : Gris */
+  border-radius: 8px;
+}
+
+.badge:empty {
+  display: none;
+}
+
+a.badge:hover,
+a.badge:focus {
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+}

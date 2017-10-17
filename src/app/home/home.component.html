@@ -1,0 +1,29 @@
+<h2 class="header">Series</h2>
+
+<div class="row">
+
+    <label for="show">Serie : </label>
+    <select id="show" [(ngModel)]="selectedSerie" [disabled]="listSeries.length < 1" (change)="onChangeSerie()" style="width: 200px;">
+        <option *ngFor="let serie of listSeries" [ngValue]="serie">{{ serie.show_name }}</option>
+    </select>
+    
+    <label for="show">Saison : </label>
+    <select id="show" [(ngModel)]="selectedSaison" [disabled]="!listSaisons.length" (change)="onChangeSaison()" style="width: 100px;">
+        <option *ngFor="let saison of listSaisons" [ngValue]="saison">{{ saison.index }}</option>
+    </select>
+    
+    <label for="show">Episode : </label>
+    <select id="show" [(ngModel)]="selectedEpisode" [disabled]="!selectedSaison" (change)="onChangeEpisode()" style="width: 250px;">
+        <option *ngFor="let episode of listEpisodes" [ngValue]="episode">{{ episode.id }}. {{ episode.name }}</option>
+    </select>
+
+    <br>
+    <img [src]="bannerUrl" class="banner" />
+	<br>
+	
+    <div class="video-container">
+        <video id="player" class="responsive-video" [hidden]="!showPlayer" [src]="url" controls width="100%" poster="data:image/gif,AAAA">
+        </video>
+    </div>
+    
+</div>
