@@ -1,4 +1,6 @@
 var express = require('express');
+var session = require("express-session");
+var bodyParser = require("body-parser");
 var http = require('http');
 var morgan = require('morgan');
 var fs = require('fs');
@@ -8,10 +10,23 @@ var _ = require('underscore');
 
 var ripSubtitles = require('rip-subtitles');
 
-var app = express();
+var passport = require('passport');
+var BasicStrategy = require('passport-http').BasicStrategy;
 
+var app = express();
 app.use(morgan('combined')); // Active le middleware de logging
-app.use('/', express.static(__dirname + '/dist'));
+app.use(passport.initialize());
+app.use('/', passport.authenticate('basic', { session: false }));
+app.use('/', express.static(path.join(__dirname, 'dist')));
+
+passport.use(new BasicStrategy(
+    function(username, password, done) {
+      if (username === 'worthless' && password === 'test') {
+        return done(null, { username: 'worthless' });
+      }
+      return done(null, false, { message: 'Incorrect password.' });      
+    }
+));
 
 var SickRage = (function () {
     var options = {
@@ -76,7 +91,8 @@ var SickRage = (function () {
     }
 })();
 
-app.get('/serie/:id?', function (req, res) {
+app.get('/rest/serie/:id?', passport.authenticate('basic', { session: false }), function(req, res) {
+
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Cache-Control, Pragma, Origin, Authorization, Content-Type, X-Requested-With");
     res.header("Access-Control-Allow-Methods", "GET");
@@ -120,7 +136,7 @@ app.get('/serie/:id?', function (req, res) {
     }
 });
 
-app.get('/stream/:id/:season/:episode', function (req, res) {
+app.get('/rest/stream/:id/:season/:episode', passport.authenticate('basic', { session: false }), function (req, res) {
     var id = req.params.id;
     var season = req.params.season;
     var episode = req.params.episode;
@@ -230,7 +246,7 @@ app.get('/stream/:id/:season/:episode', function (req, res) {
     });
 });
 
-app.get('/subtitle/:id/:season/:episode', function (req, res) {
+app.get('/rest/subtitle/:id/:season/:episode', passport.authenticate('basic', { session: false }), function (req, res) {
     var id = req.params.id;
     var season = req.params.season;
     var episode = req.params.episode;
@@ -296,7 +312,7 @@ app.get('/subtitle/:id/:season/:episode', function (req, res) {
     });
 });
 
-app.get('/resource/:id/:type', function (req, res) {
+app.get('/rest/resource/:id/:type', passport.authenticate('basic', { session: false }), function (req, res) {
     var id = req.params.id;
     var type = req.params.type;
 
@@ -319,15 +335,21 @@ app.get('/resource/:id/:type', function (req, res) {
     });
 });
 
-//app.on('listening', function () {
-//	console.log('Application Streamer started !');
-//});
+// development error handler
+// will print stacktrace
+app.use(function(err, req, res) {
+    res.status(err.status || 500);
+    res.render('error', {
+        message: err.message,
+        error: err
+    });
+});
 
 var isNumber = function (n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
 };
 
-console.log("Server listenning on port 8080 ...");
-app.listen(8080, '127.0.0.1', function () {
+console.log("Server listenning on port 80 ...");
+app.listen(80, '0.0.0.0', function () {
     console.log('Application Streamer started !');
 });
