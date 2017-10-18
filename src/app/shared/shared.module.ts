@@ -27,6 +27,12 @@ import {
   MatSnackBarModule
 } from '@angular/material';
 
+/* Videogular 2 */
+import { VgCoreModule } from 'videogular2/core';
+import { VgControlsModule } from 'videogular2/controls';
+import { VgOverlayPlayModule } from 'videogular2/overlay-play';
+import { VgBufferingModule } from 'videogular2/buffering';
+// import { SingleMediaPlayer } from './single-media-player';
 
 /* Service */
 import { SessionManagerService } from './manager/session.manager';
@@ -49,7 +55,11 @@ import { CookieManagerService } from './manager/cookie.manager';
     MatSnackBarModule,
     MatExpansionModule,
     MatPaginatorModule,
-    MatSelectModule
+    MatSelectModule,
+    VgCoreModule,
+    VgControlsModule,
+    VgOverlayPlayModule,
+    VgBufferingModule
   ],
   exports: [
     // Shared Modules
@@ -72,7 +82,11 @@ import { CookieManagerService } from './manager/cookie.manager';
     MatSnackBarModule,
     MatExpansionModule,
     MatPaginatorModule,
-    MatSelectModule
+    MatSelectModule,
+    VgCoreModule,
+    VgControlsModule,
+    VgOverlayPlayModule,
+    VgBufferingModule
   ],
   declarations: [
     HeaderComponent,

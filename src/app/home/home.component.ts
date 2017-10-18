@@ -1,15 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 
+import { VgAPI } from 'videogular2/core';
+
 import { SerieService } from '../shared/services/serie.service';
 
 import { Serie } from '../shared/models/serie';
 import { Saison } from '../shared/models/saison';
+import { IPlayable } from 'videogular2/src/core/vg-media/i-playable';
 
 @Component({
   moduleId: module.id,
   templateUrl: 'home.component.html'
 })
 export class HomeComponent implements OnInit {
+
+  api: VgAPI;
 
   listSeries: Serie[] = [];
   listSaisons: Saison[] = [];
@@ -20,7 +25,7 @@ export class HomeComponent implements OnInit {
 
   showPlayer = false;
 
-  url = '';
+  sources: Array<Object> = [];
   subtitle = '';
   bannerUrl = '';
 
@@ -31,6 +36,10 @@ export class HomeComponent implements OnInit {
 
   public ngOnInit() {
     this.loadAllSeries();
+  }
+
+  public onPlayerReady(api: VgAPI) {
+    this.api = api;
   }
 
   public onChangeSerie() {
@@ -56,10 +65,15 @@ export class HomeComponent implements OnInit {
   }
 
   public onChangeEpisode() {
-    this.url = this.baseUrl + 'stream/' + this.selectedSerie.indexerid + '/' + this.selectedSaison.index + '/' + this.selectedEpisode.id;
-    // tslint:disable-next-line:max-line-length
+    this.sources = [{
+      url: this.baseUrl + 'stream/' + this.selectedSerie.indexerid + '/' + this.selectedSaison.index + '/' + this.selectedEpisode.id,
+      type: 'video/mp4'
+    }];
+      // tslint:disable-next-line:max-line-length
     this.subtitle = this.baseUrl + 'subtitle/' + this.selectedSerie.indexerid + '/' + this.selectedSaison.index + '/' + this.selectedEpisode.id;
     this.showPlayer = true;
+    this.api.getDefaultMedia().addTextTrack('subtitles', 'English', 'fr');
+    // this.media;
   }
 
   private loadAllSeries() {
