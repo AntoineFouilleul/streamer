@@ -114,6 +114,21 @@ exports.push([module.i, "@charset \"UTF-8\";\n/* You can add global styles to th
 
 /***/ }),
 
+/***/ "../../../../css-loader/index.js?{\"sourceMap\":false,\"importLoaders\":1}!../../../../postcss-loader/index.js?{\"ident\":\"postcss\"}!../../../../videogular2/fonts/videogular.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "@font-face {\n  font-family: 'videogular';\n  src:  url(" + __webpack_require__("../../../../videogular2/fonts/videogular.eot?hj1wei") + ");\n  src:  url(" + __webpack_require__("../../../../videogular2/fonts/videogular.eot?hj1wei") + "#iefix) format('embedded-opentype'),\n    url(" + __webpack_require__("../../../../videogular2/fonts/videogular.ttf?hj1wei") + ") format('truetype'),\n    url(" + __webpack_require__("../../../../videogular2/fonts/videogular.woff?hj1wei") + ") format('woff'),\n    url(" + __webpack_require__("../../../../videogular2/fonts/videogular.svg?hj1wei") + "#videogular) format('svg');\n  font-weight: normal;\n  font-style: normal;\n}\n\n[class^=\"vg-icon-\"], [class*=\" vg-icon-\"] {\n  /* use !important to prevent issues with browser extensions that change fonts */\n  font-family: 'videogular' !important;\n  speak: none;\n  font-style: normal;\n  font-weight: normal;\n  font-variant: normal;\n  text-transform: none;\n  line-height: 1;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n  -webkit-box-pack: center;\n      -ms-flex-pack: center;\n          justify-content: center;\n  width: 50px;\n  font-size: 24px;\n\n  /* Better Font Rendering =========== */\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n}\n\n\n.vg-icon-closed_caption:before {\n  content: \"\\E006\";\n}\n.vg-icon-pause:before {\n  content: \"\\E018\";\n}\n.vg-icon-play_arrow:before {\n  content: \"\\E01B\";\n}\n.vg-icon-repeat:before {\n  content: \"\\E023\";\n}\n.vg-icon-replay:before {\n  content: \"\\E025\";\n}\n.vg-icon-skip_next:before {\n  content: \"\\E027\";\n}\n.vg-icon-skip_previous:before {\n  content: \"\\E028\";\n}\n.vg-icon-stop:before {\n  content: \"\\E02A\";\n}\n.vg-icon-volume_down:before {\n  content: \"\\E030\";\n}\n.vg-icon-volume_mute:before {\n  content: \"\\E031\";\n}\n.vg-icon-volume_off:before {\n  content: \"\\E032\";\n}\n.vg-icon-volume_up:before {\n  content: \"\\E033\";\n}\n.vg-icon-hd:before {\n  content: \"\\E035\";\n}\n.vg-icon-forward_10:before {\n  content: \"\\E038\";\n}\n.vg-icon-forward_30:before {\n  content: \"\\E039\";\n}\n.vg-icon-replay_10:before {\n  content: \"\\E03B\";\n}\n.vg-icon-replay_30:before {\n  content: \"\\E03C\";\n}\n.vg-icon-fullscreen:before {\n  content: \"\\E20C\";\n}\n.vg-icon-fullscreen_exit:before {\n  content: \"\\E20D\";\n}\n\nvg-player video {\n    width: 100%;\n    height: 100%;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
 /***/ "../../../../css-loader/index.js?{\"sourceMap\":false,\"importLoaders\":1}!../../../../postcss-loader/index.js?{\"ident\":\"postcss\"}!../../../material/prebuilt-themes/indigo-pink.css":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -631,6 +646,61 @@ function updateLink(linkElement, obj) {
 
 /***/ }),
 
+/***/ "../../../../videogular2/fonts/videogular.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("../../../../css-loader/index.js?{\"sourceMap\":false,\"importLoaders\":1}!../../../../postcss-loader/index.js?{\"ident\":\"postcss\"}!../../../../videogular2/fonts/videogular.css");
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__("../../../../style-loader/addStyles.js")(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../css-loader/index.js??ref--8-1!../../postcss-loader/index.js??postcss!./videogular.css", function() {
+			var newContent = require("!!../../css-loader/index.js??ref--8-1!../../postcss-loader/index.js??postcss!./videogular.css");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ "../../../../videogular2/fonts/videogular.eot?hj1wei":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "videogular.535a6d96e96b8bc4549f.eot";
+
+/***/ }),
+
+/***/ "../../../../videogular2/fonts/videogular.svg?hj1wei":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "videogular.d4f9c9f4aca582e94b2a.svg";
+
+/***/ }),
+
+/***/ "../../../../videogular2/fonts/videogular.ttf?hj1wei":
+/***/ (function(module, exports) {
+
+module.exports = "data:application/x-font-ttf;base64,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"
+
+/***/ }),
+
+/***/ "../../../../videogular2/fonts/videogular.woff?hj1wei":
+/***/ (function(module, exports) {
+
+module.exports = "data:application/font-woff;base64,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"
+
+/***/ }),
+
 /***/ "../../../material/prebuilt-themes/indigo-pink.css":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -664,6 +734,7 @@ if(false) {
 __webpack_require__("../../../../font-awesome/css/font-awesome.min.css");
 __webpack_require__("../../../material/prebuilt-themes/indigo-pink.css");
 __webpack_require__("../../../../materialize-css/dist/css/materialize.css");
+__webpack_require__("../../../../videogular2/fonts/videogular.css");
 __webpack_require__("../../../../../src/assets/icon.css");
 module.exports = __webpack_require__("../../../../../src/styles.scss");
 
