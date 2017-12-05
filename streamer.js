@@ -375,7 +375,7 @@ function onError(error) {
       throw error;
     }
   
-    var bind = typeof SERVER.APP_PORT === 'string' ? 'Pipe ' + SERVER.APP_PORT : 'Port ' + SERVER.APP_PORT;
+    var bind = 'Port 80';
   
     // handle specific listen errors with friendly messages
     switch (error.code) {
