@@ -3,6 +3,7 @@ var session = require("express-session");
 var bodyParser = require("body-parser");
 var helmet = require('helmet');
 var http = require('http');
+var httpServer = require('http').Server;
 var morgan = require('morgan');
 var fs = require('fs');
 var path = require('path');
@@ -15,6 +16,7 @@ var passport = require('passport');
 var BasicStrategy = require('passport-http').BasicStrategy;
 
 var app = express();
+var server = httpServer(app);
 app.use(helmet());
 app.use(morgan('combined')); // Active le middleware de logging
 app.use(passport.initialize());
@@ -365,9 +367,6 @@ var isNumber = function (n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
 };
 
-console.log("Server listenning on port 80 ...");
-app.listen(80, '0.0.0.0', onListening).on('error', onError);
-
 /**
  * Event listener for HTTP server "error" event.
  */
@@ -391,13 +390,20 @@ function onError(error) {
     default:
       throw error;
     }
-  }
+}
   
-  /**
-   * Event listener for HTTP server "listening" event.
-   */
-  function onListening() {
-    var addr = http.address();
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+function onListening() {
+    var addr = server.address();
     var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
     console.log('Listening on ' + bind);
-  }
+}
+
+/*
+ * Start server
+ */
+server.listen(80, '0.0.0.0');
+server.on('error', onError);
+server.on('listening', onListening);
