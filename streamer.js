@@ -1,6 +1,7 @@
 var express = require('express');
 var session = require("express-session");
 var bodyParser = require("body-parser");
+var helmet = require('helmet');
 var http = require('http');
 var morgan = require('morgan');
 var fs = require('fs');
@@ -14,6 +15,7 @@ var passport = require('passport');
 var BasicStrategy = require('passport-http').BasicStrategy;
 
 var app = express();
+app.use(helmet());
 app.use(morgan('combined')); // Active le middleware de logging
 app.use(passport.initialize());
 app.use('/', passport.authenticate('basic', { session: false }));
@@ -264,21 +266,21 @@ app.get('/rest/subtitle/:id/:season/:episode', passport.authenticate('basic', { 
                     if (err.code === 'ENOENT') {
 
                         // Try to get subtitle from video
-                        ripSubtitles(data.location, { lang: 'fre', format: 'webvtt' }, function (err, subtitles) {
-                            if (subtitles) {
-                                res.writeHead(200, {
-                                    'Content-Type': 'text/plain; charset=UTF-8',
-                                    'Connection': 'keep-alive',
-                                    'Content-Length': subtitles.toString().length
-                                });
+                        // ripSubtitles(data.location, { lang: 'fre', format: 'webvtt' }, function (err, subtitles) {
+                        //     if (subtitles) {
+                        //         res.writeHead(200, {
+                        //             'Content-Type': 'text/plain; charset=UTF-8',
+                        //             'Connection': 'keep-alive',
+                        //             'Content-Length': subtitles.toString().length
+                        //         });
 
-                                return res.end(subtitles);
-                            }
-                        });
+                        //         return res.end(subtitles);
+                        //     }
+                        // });
 
                         // 404 Error if file not found
-                        //console.error(err);
-                        //return res.sendStatus(404);
+                        console.error(err);
+                        return res.sendStatus(404);
                     } else {
                         return res.end(err);
                     }
@@ -338,6 +340,14 @@ app.get('/rest/resource/:id/:type', passport.authenticate('basic', { session: fa
 // development error handler
 // will print stacktrace
 app.use(function(err, req, res) {
+    err = err || {};
+    var msg = err.message || err.msg || 'Internal Server Error';
+    if (err.message || err.msg) {
+        console.error(msg);
+    }
+    if (!err.hideStack && !err.statusCode) {
+        console.error(error.stack);
+    }
     res.status(err.status || 500);
     res.render('error', {
         message: err.message,
@@ -345,11 +355,49 @@ app.use(function(err, req, res) {
     });
 });
 
+// Redirect other page
+app.use(function(req, res) {
+    console.error('Router error: Unknow route (' + req.url + ')');
+    return res.sendStatus(404);
+});
+
 var isNumber = function (n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
 };
 
 console.log("Server listenning on port 80 ...");
-app.listen(80, '0.0.0.0', function () {
-    console.log('Application Streamer started !');
-});
+app.listen(80, '0.0.0.0', onListening).on('error', onError);
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+function onError(error) {
+    if (error.syscall !== 'listen') {
+      throw error;
+    }
+  
+    var bind = typeof SERVER.APP_PORT === 'string' ? 'Pipe ' + SERVER.APP_PORT : 'Port ' + SERVER.APP_PORT;
+  
+    // handle specific listen errors with friendly messages
+    switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+    }
+  }
+  
+  /**
+   * Event listener for HTTP server "listening" event.
+   */
+  function onListening() {
+    var addr = http.address();
+    var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
+    console.log('Listening on ' + bind);
+  }
