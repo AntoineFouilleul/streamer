@@ -39,7 +39,7 @@ var SickRage = (function () {
     };
 
     var api = function (cmd, done, error) {
-        var path = '/api/9f4a5d07334a3b2c91391d170772c99d/?cmd=' + cmd;
+        var path = '/api/xxx/?cmd=' + cmd;
         var restAPI = http.get(_.extend(options, {
             path: path
         }), function (result) {
