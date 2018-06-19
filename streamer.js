@@ -35,7 +35,7 @@ passport.use(new BasicStrategy(
 var SickRage = (function () {
     var options = {
         host: 'localhost',
-        port: 81
+        port: 8081
     };
 
     var api = function (cmd, done, error) {
