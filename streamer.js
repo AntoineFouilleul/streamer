@@ -34,7 +34,7 @@ passport.use(new BasicStrategy(
 
 var SickRage = (function () {
     var options = {
-        host: '82.253.123.14',
+        host: 'localhost',
         port: 81
     };
 
