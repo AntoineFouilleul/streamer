@@ -3,6 +3,11 @@
 # config files
 config.json
 
+# certificates
+*.key
+*.crt
+*.csr
+
 # compiled output
 /tmp
 /out-tsc

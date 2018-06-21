@@ -3,7 +3,7 @@ var session = require("express-session");
 var bodyParser = require("body-parser");
 var helmet = require('helmet');
 var http = require('http');
-var httpServer = require('http').Server;
+var https = require('https');
 var morgan = require('morgan');
 var fs = require('fs');
 var path = require('path');
@@ -17,9 +17,13 @@ var passport = require('passport');
 var BasicStrategy = require('passport-http').BasicStrategy;
 
 var config = require('./config.json');
-
+ 
 var app = express();
-var server = httpServer(app);
+if (config.app.https) {
+    var privateKey  = fs.readFileSync(config.app.privateKey, 'utf8');
+    var certificate = fs.readFileSync(config.app.certificate, 'utf8');
+}
+var server = config.app.https ? https.createServer({ key: privateKey, cert: certificate }, app) : http.createServer(app);
 app.use(helmet());
 app.use(morgan('combined')); // Active le middleware de logging
 app.use(passport.initialize());
