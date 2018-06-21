@@ -9,11 +9,14 @@ var fs = require('fs');
 var path = require('path');
 var mime = require('mime-types');
 var _ = require('underscore');
+var sha512 = require('js-sha512').sha512;
 
 var ripSubtitles = require('rip-subtitles');
 
 var passport = require('passport');
 var BasicStrategy = require('passport-http').BasicStrategy;
+
+var config = require('./config.json');
 
 var app = express();
 var server = httpServer(app);
@@ -25,8 +28,8 @@ app.use('/', express.static(path.join(__dirname, 'dist')));
 
 passport.use(new BasicStrategy(
     function(username, password, done) {
-      if (username === 'worthless' && password === 'test') {
-        return done(null, { username: 'worthless' });
+      if (config.users[username] && config.users[username] === sha512(password)) {
+        return done(null, { username });
       }
       return done(null, false, { message: 'Incorrect password.' });      
     }
@@ -34,12 +37,12 @@ passport.use(new BasicStrategy(
 
 var SickRage = (function () {
     var options = {
-        host: 'localhost',
-        port: 8081
+        host: config.api.host,
+        port: config.api.port
     };
 
     var api = function (cmd, done, error) {
-        var path = '/api/xxx/?cmd=' + cmd;
+        var path = `/api/${config.api.key}/?cmd=${cmd}`;
         var restAPI = http.get(_.extend(options, {
             path: path
         }), function (result) {
@@ -86,9 +89,9 @@ var SickRage = (function () {
             if (type === 'banner') {
                 cmd = 'show.getbanner';
             } else if (type === 'poster') {
-                cmd = 'show.getposter'
+                cmd = 'show.getposter';
             } else if (type === 'fanart') {
-                cmd = 'show.getfanart'
+                cmd = 'show.getfanart';
             }
             return api(cmd + "&indexerid=" + id, done, error);
         }
@@ -375,7 +378,7 @@ function onError(error) {
       throw error;
     }
   
-    var bind = 'Port 80';
+    var bind = `Port ${config.app.port}`;
   
     // handle specific listen errors with friendly messages
     switch (error.code) {
@@ -404,6 +407,6 @@ function onListening() {
 /*
  * Start server
  */
-server.listen(80, '0.0.0.0');
+server.listen(config.app.port, config.app.host);
 server.on('error', onError);
 server.on('listening', onListening);
