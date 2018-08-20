@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 
-import { VgAPI } from 'videogular2/core';
+import { VgAPI, VgStates } from 'videogular2/core';
 
 import { SerieService } from '../shared/services/serie.service';
 
@@ -40,6 +40,11 @@ export class HomeComponent implements OnInit {
 
   public onPlayerReady(api: VgAPI) {
     this.api = api;
+
+    this.api.getDefaultMedia().subscriptions.ended.subscribe(() => {
+      // Set the video to the beginning
+      this.api.getDefaultMedia().currentTime = 0;
+    });
   }
 
   public onChangeSerie() {
@@ -74,6 +79,19 @@ export class HomeComponent implements OnInit {
     this.showPlayer = true;
     this.api.getDefaultMedia().addTextTrack('subtitles', 'English', 'fr');
     // this.media;
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  public onKeyDown(event: KeyboardEvent) {
+    // On press Space (32)
+    if (event.keyCode === 32) {
+      event.preventDefault();
+      if (this.api.getDefaultMedia().state === VgStates.VG_PLAYING) {
+        this.api.getDefaultMedia().pause();
+      } else if (this.api.getDefaultMedia().state === VgStates.VG_PAUSED) {
+        this.api.getDefaultMedia().play();
+      }
+    }
   }
 
   private loadAllSeries() {
