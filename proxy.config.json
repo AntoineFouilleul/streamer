@@ -5,7 +5,6 @@
         "protocol": "http:",
         "port": 8080
       },
-      "pathRewrite": {"^/rest": ""},
       "secure": false,
       "changeOrigin": false,
       "logLevel": "info"

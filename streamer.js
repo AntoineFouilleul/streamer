@@ -19,6 +19,7 @@ var BasicStrategy = require('passport-http').BasicStrategy;
 var config = require('./config.json');
  
 var app = express();
+var router = express.Router();
 if (config.app.https) {
     var privateKey  = fs.readFileSync(config.app.privateKey, 'utf8');
     var certificate = fs.readFileSync(config.app.certificate, 'utf8');
@@ -28,6 +29,7 @@ app.use(helmet());
 app.use(morgan('combined')); // Active le middleware de logging
 app.use(passport.initialize());
 app.use('/', passport.authenticate('basic', { session: false }));
+app.use('/rest', router);
 app.use('/', express.static(path.join(__dirname, 'dist')));
 
 passport.use(new BasicStrategy(
@@ -102,7 +104,12 @@ var SickRage = (function () {
     }
 })();
 
-app.get('/rest/serie/:id?', passport.authenticate('basic', { session: false }), function(req, res) {
+// Tweaks to handle Angular routes
+app.get('/:id/:id?/:id?', function(req, res) {
+    res.sendfile('./dist/index.html');
+})
+
+router.get('/serie/:id?', passport.authenticate('basic', { session: false }), function(req, res) {
 
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Cache-Control, Pragma, Origin, Authorization, Content-Type, X-Requested-With");
@@ -147,7 +154,7 @@ app.get('/rest/serie/:id?', passport.authenticate('basic', { session: false }), 
     }
 });
 
-app.get('/rest/stream/:id/:season/:episode', passport.authenticate('basic', { session: false }), function (req, res) {
+router.get('/stream/:id/:season/:episode', passport.authenticate('basic', { session: false }), function (req, res) {
     var id = req.params.id;
     var season = req.params.season;
     var episode = req.params.episode;
@@ -257,7 +264,7 @@ app.get('/rest/stream/:id/:season/:episode', passport.authenticate('basic', { se
     });
 });
 
-app.get('/rest/subtitle/:id/:season/:episode', passport.authenticate('basic', { session: false }), function (req, res) {
+router.get('/subtitle/:id/:season/:episode', passport.authenticate('basic', { session: false }), function (req, res) {
     var id = req.params.id;
     var season = req.params.season;
     var episode = req.params.episode;
@@ -323,7 +330,7 @@ app.get('/rest/subtitle/:id/:season/:episode', passport.authenticate('basic', { 
     });
 });
 
-app.get('/rest/resource/:id/:type', passport.authenticate('basic', { session: false }), function (req, res) {
+router.get('/resource/:id/:type', passport.authenticate('basic', { session: false }), function (req, res) {
     var id = req.params.id;
     var type = req.params.type;
 
@@ -348,21 +355,21 @@ app.get('/rest/resource/:id/:type', passport.authenticate('basic', { session: fa
 
 // development error handler
 // will print stacktrace
-app.use(function(err, req, res) {
-    err = err || {};
-    var msg = err.message || err.msg || 'Internal Server Error';
-    if (err.message || err.msg) {
-        console.error(msg);
-    }
-    if (!err.hideStack && !err.statusCode) {
-        console.error(error.stack);
-    }
-    res.status(err.status || 500);
-    res.render('error', {
-        message: err.message,
-        error: err
-    });
-});
+// app.use(function(err, req, res) {
+//     err = err || {};
+//     var msg = err.message || err.msg || 'Internal Server Error';
+//     if (err.message || err.msg) {
+//         console.error(msg);
+//     }
+//     if (!err.hideStack && !err.statusCode) {
+//         console.error(error.stack);
+//     }
+//     res.status(err.status || 500);
+//     res.render('error', {
+//         message: err.message,
+//         error: err
+//     });
+// });
 
 // Redirect other page
 app.use(function(req, res) {
