@@ -1,4 +1,6 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 import { VgAPI, VgStates } from 'videogular2/core';
 
@@ -7,34 +9,51 @@ import { SerieService } from '../shared/services/serie.service';
 import { Serie } from '../shared/models/serie';
 import { Saison } from '../shared/models/saison';
 import { IPlayable } from 'videogular2/src/core/vg-media/i-playable';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   moduleId: module.id,
   templateUrl: 'home.component.html'
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
 
-  api: VgAPI;
+  public listSeries: Serie[] = [];
+  public listSaisons: Saison[] = [];
+  public listEpisodes = [];
+  public selectedSerie: Serie = null;
+  public selectedSaison = null;
+  public selectedEpisode = null;
 
-  listSeries: Serie[] = [];
-  listSaisons: Saison[] = [];
-  listEpisodes = [];
-  selectedSerie: Serie = null;
-  selectedSaison = null;
-  selectedEpisode = null;
+  public showPlayer = false;
 
-  showPlayer = false;
-
-  sources: Array<Object> = [];
-  subtitle = '';
-  bannerUrl = '';
+  public sources: Array<Object> = [];
+  public subtitle = '';
+  public bannerUrl = '';
 
   private baseUrl = '/rest/';
+  private api: VgAPI;
+  private routeSub: any;
 
-  constructor(private serieService: SerieService) {
+  private idSerie: number;
+  private idSeason: number;
+  private idEpisode: number;
+
+  constructor(
+    private serieService: SerieService,
+    protected route: ActivatedRoute,
+    private router: Router,
+    private location: Location,
+    private titleService: Title
+  ) {
   }
 
   public ngOnInit() {
+    this.routeSub = this.route.params.subscribe((params) => {
+      this.idSerie = +params['serie'];
+      this.idSeason = params['season'];
+      this.idEpisode = params['episode'];
+    });
+
     this.loadAllSeries();
   }
 
@@ -56,17 +75,35 @@ export class HomeComponent implements OnInit {
 
     this.serieService.getById(this.selectedSerie.indexerid).subscribe(saisons => {
       this.listSaisons = saisons;
-      if (saisons.length === 1) {
+
+      this.selectedSaison = this.listSaisons.find((saison: Saison) => {
+        return saison.index === this.idSeason;
+      });
+      if (this.selectedSaison) {
+        this.onChangeSaison();
+      } else if (saisons.length === 1) {
         this.selectedSaison = saisons[0];
         this.onChangeSaison();
+      } else {
+        this.location.go(`/${this.selectedSerie.indexerid}`);
+        this.titleService.setTitle('Streamer.io - ' + this.selectedSerie.show_name);
       }
     });
   }
 
   public onChangeSaison() {
     this.listEpisodes = this.selectedSaison.episodes;
-    this.selectedEpisode = null;
-    this.showPlayer = false;
+    this.selectedEpisode = this.listEpisodes.find((episode: any) => {
+      return episode.id === this.idEpisode;
+    });
+    if (this.selectedEpisode) {
+      this.onChangeEpisode();
+    } else {
+      this.location.go(`/${this.selectedSerie.indexerid}/${this.selectedSaison.index}`);
+      this.titleService.setTitle('Streamer.io - ' + this.selectedSerie.show_name + ' - Saison ' + this.selectedSaison.index);
+      this.selectedEpisode = null;
+      this.showPlayer = false;
+    }
   }
 
   public onChangeEpisode() {
@@ -78,7 +115,12 @@ export class HomeComponent implements OnInit {
     this.subtitle = this.baseUrl + 'subtitle/' + this.selectedSerie.indexerid + '/' + this.selectedSaison.index + '/' + this.selectedEpisode.id;
     this.showPlayer = true;
     this.api.getDefaultMedia().addTextTrack('subtitles', 'English', 'fr');
-    // this.media;
+
+    // Change url
+    this.location.go(`/${this.selectedSerie.indexerid}/${this.selectedSaison.index}/${this.selectedEpisode.id}`);
+    this.titleService.setTitle('Streamer.io - ' + this.selectedSerie.show_name +
+    ' - Saison ' + this.selectedSaison.index +
+    ' - Episode ' + this.selectedEpisode.id + ' : ' + this.selectedEpisode.name);
   }
 
   @HostListener('window:keydown', ['$event'])
@@ -97,7 +139,17 @@ export class HomeComponent implements OnInit {
   private loadAllSeries() {
     this.serieService.getAll().subscribe(series => {
       this.listSeries = series;
+      this.selectedSerie = this.listSeries.find((serie: Serie) => {
+        return serie.indexerid === this.idSerie;
+      });
+      if (this.selectedSerie) {
+        this.onChangeSerie();
+      }
     });
+  }
+
+  public ngOnDestroy() {
+    this.routeSub.unsubscribe();
   }
 
 }
