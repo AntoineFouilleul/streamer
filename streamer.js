@@ -314,8 +314,7 @@ router.get('/subtitle/:id/:season/:episode', passport.authenticate('basic', { se
 
                         res.writeHead(200, {
                             'Content-Type': 'text/plain; charset=UTF-8',
-                            'Connection': 'keep-alive',
-                            'Content-Length': output.length
+                            'Connection': 'keep-alive'
                         });
 
                         res.end(output);
