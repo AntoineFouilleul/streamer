@@ -10,10 +10,12 @@ import { Serie } from '../shared/models/serie';
 import { Saison } from '../shared/models/saison';
 import { IPlayable } from 'videogular2/src/core/vg-media/i-playable';
 import { Title } from '@angular/platform-browser';
+import { Episode } from '../shared/models/episode';
 
 @Component({
   moduleId: module.id,
-  templateUrl: 'home.component.html'
+  templateUrl: 'home.component.html',
+  styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
@@ -21,8 +23,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   public listSaisons: Saison[] = [];
   public listEpisodes = [];
   public selectedSerie: Serie = null;
-  public selectedSaison = null;
-  public selectedEpisode = null;
+  public selectedSaison: Saison = null;
+  public selectedEpisode: Episode = null;
+  public currentIndex: number;
 
   public showPlayer = false;
 
@@ -34,9 +37,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   private api: VgAPI;
   private routeSub: any;
 
-  private idSerie: number;
-  private idSeason: number;
-  private idEpisode: number;
+  public idSerie: number;
+  public idSeason: number;
+  public idEpisode: number;
 
   constructor(
     private serieService: SerieService,
@@ -72,9 +75,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.listSaisons = [];
     this.listEpisodes = [];
     this.showPlayer = false;
+    this.bannerUrl = null;
 
     this.serieService.getById(this.selectedSerie.indexerid).subscribe(saisons => {
       this.listSaisons = saisons;
+      this.bannerUrl = `/rest/resource/${this.selectedSerie.indexerid}/banner`;
 
       this.selectedSaison = this.listSaisons.find((saison: Saison) => {
         return saison.index === this.idSeason;
@@ -107,6 +112,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   public onChangeEpisode() {
+    this.currentIndex = this.selectedSaison.episodes.indexOf(this.selectedEpisode);
     this.sources = [{
       url: this.baseUrl + 'stream/' + this.selectedSerie.indexerid + '/' + this.selectedSaison.index + '/' + this.selectedEpisode.id,
       type: 'video/mp4'
@@ -133,6 +139,28 @@ export class HomeComponent implements OnInit, OnDestroy {
       } else if (this.api.getDefaultMedia().state === VgStates.VG_PAUSED) {
         this.api.getDefaultMedia().play();
       }
+    }
+  }
+
+  public onGoToPrev() {
+    const index = this.currentIndex - 1;
+    const nextEpisode = index >= 0 ? this.selectedSaison.episodes[index] : null;
+    if (nextEpisode) {
+      this.selectedEpisode = nextEpisode;
+      this.idEpisode = nextEpisode.id;
+      this.router.navigate(['/', this.selectedSerie.indexerid, this.selectedSaison.index, nextEpisode.id]);
+      this.onChangeEpisode();
+    }
+  }
+
+  public onGoToNext() {
+    const index = this.currentIndex + 1;
+    const nextEpisode = this.selectedSaison.episodes.length > index ? this.selectedSaison.episodes[index] : null;
+    if (nextEpisode) {
+      this.selectedEpisode = nextEpisode;
+      this.idEpisode = nextEpisode.id;
+      this.router.navigate(['/', this.selectedSerie.indexerid, this.selectedSaison.index, nextEpisode.id]);
+      this.onChangeEpisode();
     }
   }
 

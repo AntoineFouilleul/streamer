@@ -3,7 +3,7 @@
 <div class="row">
 
   <label for="show">Serie : </label>
-  <select id="show" [(ngModel)]="selectedSerie" [disabled]="listSeries.length < 1" (change)="onChangeSerie()" style="width: 200px;">
+  <select id="show" [(ngModel)]="selectedSerie" [disabled]="listSeries.length < 1" (change)="idSeason = null; idEpisode = null; onChangeSerie()" style="width: 200px;">
         <option *ngFor="let serie of listSeries" [ngValue]="serie">{{ serie.show_name }}</option>
     </select>
 
@@ -18,42 +18,41 @@
     </select>
 
   <br>
-  <img [src]="bannerUrl" class="banner" />
+  <img [src]="bannerUrl" [hidden]="!bannerUrl" class="banner" />
   <br>
 
-  <!-- <div class="video-container">
-    <video id="player" class="responsive-video" [hidden]="!showPlayer" [src]="url" controls width="100%" poster="data:image/gif,AAAA">
-    </video>
-  </div> -->
+  <div class="container-video" [hidden]="!showPlayer">
+    <span (click)="onGoToPrev()" [hidden]="currentIndex == 0" title="Épisode précédent" class="arrow prev"><i class="fas fa-chevron-left fa-5x"></i></span>
+    <vg-player class="responsive-video" (onPlayerReady)="onPlayerReady($event)">
+      <vg-overlay-play></vg-overlay-play>
+      <vg-buffering></vg-buffering>
+      <vg-scrub-bar>
+        <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
+        <vg-scrub-bar-buffering-time></vg-scrub-bar-buffering-time>
+      </vg-scrub-bar>
 
-  <vg-player [hidden]="!showPlayer" class="responsive-video" (onPlayerReady)="onPlayerReady($event)">
-    <vg-overlay-play></vg-overlay-play>
-    <vg-buffering></vg-buffering>
-    <vg-scrub-bar>
-      <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
-      <vg-scrub-bar-buffering-time></vg-scrub-bar-buffering-time>
-    </vg-scrub-bar>
+      <vg-controls [vgAutohide]="true" [vgAutohideTime]="1.5">
+        <vg-play-pause></vg-play-pause>
+        
+        <vg-time-display vgProperty="current" vgFormat="mm:ss"></vg-time-display>
 
-    <vg-controls [vgAutohide]="true" [vgAutohideTime]="1.5">
-      <vg-play-pause></vg-play-pause>
-      
-      <vg-time-display vgProperty="current" vgFormat="mm:ss"></vg-time-display>
+        <vg-scrub-bar style="pointer-events: none;"></vg-scrub-bar>
 
-      <vg-scrub-bar style="pointer-events: none;"></vg-scrub-bar>
+        <vg-time-display vgProperty="total" vgFormat="mm:ss"></vg-time-display>
 
-      <vg-time-display vgProperty="total" vgFormat="mm:ss"></vg-time-display>
+        <vg-track-selector></vg-track-selector>
+        <vg-mute></vg-mute>
+        <vg-volume></vg-volume>
 
-      <vg-track-selector></vg-track-selector>
-      <vg-mute></vg-mute>
-      <vg-volume></vg-volume>
+        <vg-fullscreen></vg-fullscreen>
+      </vg-controls>
 
-      <vg-fullscreen></vg-fullscreen>
-    </vg-controls>
-
-    <video [vgMedia]="media" [vgMaster]="true" #media id="player" preload="auto" width="100%">
-      <source *ngFor="let video of sources" [src]="video.url" [type]="video.type">
-      <track [src]="subtitle" kind="subtitles" label="Français" default>
-    </video>
-  </vg-player>
+      <video [vgMedia]="media" [vgMaster]="true" #media id="player" preload="auto" width="100%">
+        <source *ngFor="let video of sources" [src]="video.url" [type]="video.type">
+        <track [src]="subtitle" kind="subtitles" label="Français" default>
+      </video>
+    </vg-player>
+    <span (click)="onGoToNext()" [hidden]="currentIndex == (selectedSaison?.episodes?.length - 1)" title="Épisode suivant" class="arrow next"><i class="fas fa-chevron-right fa-5x"></i></span>
+  </div>
 
 </div>

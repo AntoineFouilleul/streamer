@@ -1,0 +1,22 @@
+.container-video {
+    position: relative;
+}
+
+.banner {
+  margin-top: 6px;
+  width: 100%;
+}
+
+.arrow {
+    cursor: pointer;
+    color: #ee6e73;
+    position: absolute;
+    top: 42%;
+    &.prev {
+        margin-left: -50px;
+    }
+    &.next {
+        right: 0;
+        margin-right: -50px;
+    }
+}
