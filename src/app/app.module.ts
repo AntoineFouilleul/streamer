@@ -14,15 +14,21 @@ import { AuthGuard } from './shared/guards/auth.guard';
 import { AlertService } from './shared/services/alert.service';
 import { AuthenticationService } from './shared/services/authentication.service';
 import { SerieService } from './shared/services/serie.service';
-import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
+import { TopComponent } from './top/top.component';
+import { SeriesComponent } from './series/series.component';
+import { NewsComponent } from './news/news.component';
+import { FavoritesComponent } from './favorites/favorites.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AlertComponent,
-    HomeComponent,
     LoginComponent,
+    SeriesComponent,
+    TopComponent,
+    NewsComponent,
+    FavoritesComponent
   ],
   imports: [
     BrowserModule,

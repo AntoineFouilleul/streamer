@@ -8,16 +8,15 @@ import { SerieService } from '../shared/services/serie.service';
 
 import { Serie } from '../shared/models/serie';
 import { Saison } from '../shared/models/saison';
-import { IPlayable } from 'videogular2/src/core/vg-media/i-playable';
 import { Title } from '@angular/platform-browser';
 import { Episode } from '../shared/models/episode';
 
 @Component({
   moduleId: module.id,
-  templateUrl: 'home.component.html',
-  styleUrls: ['./home.component.scss']
+  templateUrl: 'series.component.html',
+  styleUrls: ['./series.component.scss']
 })
-export class HomeComponent implements OnInit, OnDestroy {
+export class SeriesComponent implements OnInit, OnDestroy {
 
   public listSeries: Serie[] = [];
   public listSaisons: Saison[] = [];
@@ -90,7 +89,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.selectedSaison = saisons[0];
         this.onChangeSaison();
       } else {
-        this.location.go(`/${this.selectedSerie.indexerid}`);
+        this.location.go(`/series/${this.selectedSerie.indexerid}`);
         this.titleService.setTitle('Streamer.io - ' + this.selectedSerie.show_name);
       }
     });
@@ -104,7 +103,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (this.selectedEpisode) {
       this.onChangeEpisode();
     } else {
-      this.location.go(`/${this.selectedSerie.indexerid}/${this.selectedSaison.index}`);
+      this.location.go(`/series/${this.selectedSerie.indexerid}/${this.selectedSaison.index}`);
       this.titleService.setTitle('Streamer.io - ' + this.selectedSerie.show_name + ' - Saison ' + this.selectedSaison.index);
       this.selectedEpisode = null;
       this.showPlayer = false;
@@ -123,7 +122,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.api.getDefaultMedia().addTextTrack('subtitles', 'English', 'fr');
 
     // Change url
-    this.location.go(`/${this.selectedSerie.indexerid}/${this.selectedSaison.index}/${this.selectedEpisode.id}`);
+    this.location.go(`/series/${this.selectedSerie.indexerid}/${this.selectedSaison.index}/${this.selectedEpisode.id}`);
     this.titleService.setTitle('Streamer.io - ' + this.selectedSerie.show_name +
     ' - Saison ' + this.selectedSaison.index +
     ' - Episode ' + this.selectedEpisode.id + ' : ' + this.selectedEpisode.name);
@@ -159,7 +158,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (nextEpisode) {
       this.selectedEpisode = nextEpisode;
       this.idEpisode = nextEpisode.id;
-      this.router.navigate(['/', this.selectedSerie.indexerid, this.selectedSaison.index, nextEpisode.id]);
+      this.router.navigate(['/series', this.selectedSerie.indexerid, this.selectedSaison.index, nextEpisode.id]);
       this.onChangeEpisode();
     }
   }

@@ -36,10 +36,9 @@ passport.use(new BasicStrategy(
 ));
 
 // Tweaks to handle Angular routes
-app.get('/:id/:id?/:id?', function(req, res) {
+app.get('/:id/:id?/:id?/:id?', function(req, res) {
     res.sendfile('./dist/index.html');
 })
-
 
 // Redirect other page
 app.use(function(req, res) {
