@@ -64,12 +64,13 @@ router.get('/stream/:id/:season/:episode', passport.authenticate('basic', { sess
         if (data.location) {
             fs.stat(data.location, function (err, stats) {
                 if (err) {
+                    console.error(data.location);
                     if (err.code === 'ENOENT') {
                         // 404 Error if file not found
-                        console.error(data.location);
                         return res.sendStatus(404);
                     }
-                    return res.end(err);
+                    // 404 Error if file not allowed
+                    return res.sendStatus(401);
                 }
 
                 if (!stats.isFile()) {
@@ -155,8 +156,10 @@ router.get('/stream/:id/:season/:episode', passport.authenticate('basic', { sess
                     end: true
                 });
             });
+        } else {
+            res.writeHead(404);
+            res.end('episode not found');
         }
-
     }, function (err) {
         res.writeHead(500);
         res.end(err);
