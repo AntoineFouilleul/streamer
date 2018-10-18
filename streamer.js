@@ -1,4 +1,5 @@
 var express = require('express');
+var blacklist = require('express-blacklist');
 var helmet = require('helmet');
 var http = require('http');
 var https = require('https');
@@ -19,6 +20,7 @@ if (config.app.https) {
     var certificate = fs.readFileSync(config.app.certificate, 'utf8');
 }
 var server = config.app.https ? https.createServer({ key: privateKey, cert: certificate }, app) : http.createServer(app);
+app.use(blacklist.blockRequests('./config/blacklist.txt'));
 app.use(helmet());
 app.use(morgan('combined')); // Active le middleware de logging
 app.use(passport.initialize());
