@@ -13,7 +13,7 @@ var api = function (cmd, done, error) {
         path: path
     }), function (result) {
         var body = '';
-        result.setEncoding('binary');
+        result.setEncoding('utf8');
         result.on('data', function (buf) {
             body += buf;
         });
