@@ -1,5 +1,16 @@
-<h2 class="header" style="margin-bottom: 1.424rem">Nouveautés</h2>
+<h2 class="header" style="margin-bottom: 1.424rem">Derniers ajouts</h2>
+<div class="row">
+    <div *ngFor="let downloaded of history">
+        <p>
+            {{downloaded.date | date: 'dd/MM/yyyy hh:mm'}} : <b>{{downloaded.show_name}}</b> - 
+            <a href="/series/{{downloaded.indexerid}}/{{downloaded.season}}/{{downloaded.episode}}">
+                Saison {{downloaded.season}} épisode {{downloaded.episode}}
+            </a>
+        </p>
+    </div>
+</div>
 
+<h2 class="header" style="margin-bottom: 1.424rem">Nouveautés</h2>
 <div class="row">
     <h5>23 Août 2018</h5>
     <p>Réorganisation des pages du site et ajout de la page nouveautés en accueil. La page des séries est à retrouver <a routerLink="series">ici</a>.</p>

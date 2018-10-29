@@ -254,6 +254,31 @@ router.get('/resource/:id/:type', passport.authenticate('basic', { session: fals
     });
 });
 
+router.get('/history', passport.authenticate('basic', { session: false }), function (req, res) {
+    SickRage.getHistory(5, function (data) {
+
+        var history = [];
+
+        for (var index in data) {
+            var downloaded = data[index]
+            history.push({
+                indexerid: downloaded.indexerid,
+                episode: downloaded.episode,
+                season: downloaded.season,
+                show_name: downloaded.show_name,
+                date: downloaded.date,
+                quality: downloaded.quality
+            });
+        }
+
+        res.end(JSON.stringify(history));
+
+    }, function (err) {
+        res.writeHead(500);
+        res.end(err);
+    });
+});
+
 var isNumber = function (n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
 };

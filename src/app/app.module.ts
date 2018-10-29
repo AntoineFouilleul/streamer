@@ -19,6 +19,7 @@ import { TopComponent } from './top/top.component';
 import { SeriesComponent } from './series/series.component';
 import { NewsComponent } from './news/news.component';
 import { FavoritesComponent } from './favorites/favorites.component';
+import { HistroryService } from './shared/services/history.service';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { FavoritesComponent } from './favorites/favorites.component';
     AuthGuard,
     AlertService,
     AuthenticationService,
-    SerieService
+    SerieService,
+    HistroryService
   ],
   bootstrap: [AppComponent]
 })

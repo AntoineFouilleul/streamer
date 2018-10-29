@@ -60,5 +60,17 @@ module.exports = {
             cmd = 'show.getfanart';
         }
         return api(cmd + "&indexerid=" + id, done, error);
+    },
+    getHistory: function (limit, done, error) {
+        return api("history&type=downloaded&limit=" + limit, function (buff) {
+            var data = JSON.parse(buff.toString()).data;
+            done(data);
+        }, error);
+    },
+    getFuture: function (type, done, error) {
+        return api("future&sort=date&paused=0&type=" + type, function (buff) {
+            var data = JSON.parse(buff.toString()).data;
+            done(data);
+        }, error);
     }
 }
