@@ -7,7 +7,7 @@ import {
   HttpErrorResponse,
   HttpInterceptor
 } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs/observable';
 import { Router } from '@angular/router';
 
 import 'rxjs/add/operator/do';
