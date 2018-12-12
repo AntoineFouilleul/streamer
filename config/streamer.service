@@ -1,0 +1,13 @@
+[Unit]
+Description=Streamer.io App
+After=network.target
+
+[Service]
+Type=forking
+Restart=always
+User=streamer
+ExecStart=/opt/streamer/node_modules/pm2/bin/pm2 start /opt/streamer/streamer.js
+ExecStop=/opt/streamer/node_modules/pm2/bin/pm2 stop /opt/streamer/streamer.js
+
+[Install]
+WantedBy=multi-user.target
