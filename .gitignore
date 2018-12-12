@@ -39,6 +39,10 @@
 npm-debug.log
 testem.log
 /typings
+.config/
+.node-gyp/
+.npm/
+.pm2/
 
 # e2e
 /e2e/*.js
